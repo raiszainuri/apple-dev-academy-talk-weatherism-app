@@ -8,5 +8,5 @@ Spec :
 
 How to use : 
 1. Pull repo
-2. Think about a new feature that you want to build in the app --> create tech spec
+2. Think about a new feature that you want to build in the app --> create tech spec by cloning tech spec template in this repo and fill it all out. Bear in mind that tech spec is different per team per company basis.
 3. Do vibe coding for rapid prototyping. Let your imagination run wild.
