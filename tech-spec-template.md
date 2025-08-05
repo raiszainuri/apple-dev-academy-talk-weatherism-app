@@ -1,18 +1,16 @@
-Tech Spec : <Feature Name>
-Author : <Author Name>
-Engineering Lead : <Eng Lead name>
-Product Specs : <Link to product specs, if any>
-Important Documents :
-- <Link to other important documents>
-- xxx
-JIRA Epic : <Link to jira epic ticket>
-Figma : <Link to figma / design file> 
-Figma Prototype : <Or protopie link...>
-BE Tech Specs : <if BE have tech specs...>
-Content Specs : <if need localization...>
-Instrumentation Specs : <if need to track user action / data...>
-QA Test Suite : <link to QA test suite>
-PICs : <name of the PICs of function, ex: PIC BE, PIC PM, PIC Designer, PIC FE, QA, PA, TPM etc>
+- Tech Spec : <Feature Name>
+- Author : <Author Name>
+- Engineering Lead : <Eng Lead name>
+- Product Specs : <Link to product specs, if any>
+- Important Documents : <Link to other important documents>
+- JIRA Epic : <Link to jira epic ticket>
+- Figma : <Link to figma / design file> 
+- Figma Prototype : <Or protopie link...>
+- BE Tech Specs : <if BE have tech specs...>
+- Content Specs : <if need localization...>
+- Instrumentation Specs : <if need to track user action / data...>
+- QA Test Suite : <link to QA test suite>
+- PICs : <name of the PICs of function, ex: PIC BE, PIC PM, PIC Designer, PIC FE, QA, PA, TPM etc>
 
 Project Overview
 =================
