@@ -83,6 +83,30 @@ class WeatherViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Helper Methods
+    func hourFromTimeString(_ time: String) -> String {
+        let formats = [
+            "yyyy-MM-dd'T'HH:mm",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd HH:mm",
+            "yyyy-MM-dd HH:mm:ss"
+        ]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX") // biar konsisten di semua device
+        
+        for format in formats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: time) {
+                formatter.dateFormat = "HH:mm"
+                return formatter.string(from: date)
+            }
+        }
+        
+        return "?"
+    }
+
+    
     func weatherDescription(for weatherCode: Int) -> String {
         switch weatherCode {
         case 0: return "Clear sky"

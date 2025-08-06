@@ -45,6 +45,27 @@ struct WeatherView: View {
                     .foregroundColor(.white.opacity(0.8))
             }
             
+            // ✅ Hourly forecast
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(0..<min(weather.hourly.time.count, 12), id: \.self) { index in
+                        VStack {
+                            Text(viewModel.hourFromTimeString(weather.hourly.time[index]))
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.8))
+                            
+                            Image(systemName: viewModel.weatherIconName(for: weather.current.weatherCode))
+                                .foregroundColor(.white)
+                            
+                            Text("\(Int(weather.hourly.temperature2m[index]))°")
+                                .font(.caption2)
+                                .foregroundColor(.white)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
             // Weather details
             HStack(spacing: 20) {
                 WeatherDetailView(
