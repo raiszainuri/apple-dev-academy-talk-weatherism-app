@@ -1,68 +1,161 @@
-- Tech Spec : <Feature Name>
-- Author : <Author Name>
-- Engineering Lead : <Eng Lead name>
-- Product Specs : <Link to product specs, if any>
-- Important Documents : <Link to other important documents>
-- JIRA Epic : <Link to jira epic ticket>
-- Figma : <Link to figma / design file> 
-- Figma Prototype : <Or protopie link...>
-- BE Tech Specs : <if BE have tech specs...>
-- Content Specs : <if need localization...>
-- Instrumentation Specs : <if need to track user action / data...>
-- QA Test Suite : <link to QA test suite>
-- PICs : <name of the PICs of function, ex: PIC BE, PIC PM, PIC Designer, PIC FE, QA, PA, TPM etc>
+## Tech Spec : Hourly Weather Forecast Horizontal Scroll
 
-Project Overview
-=================
-<Why project created, some short summary is okay...>
+* **Author** : Rais Zainuri
+* **Engineering Lead** : -
+* **Product Specs** : - 
+* **Important Documents** : - 
+* **JIRA Epic** : -
+* **Figma** : -
+* **Figma Prototype** : -
+* **BE Tech Specs** : -
+* **Content Specs** : -
+* **Instrumentation Specs** : -
+* **QA Test Suite** : -
+* **PICs** :
 
+  * **PIC FE**: Rais Zainuri
+  * **PIC PM**: 
+  * **PIC Designer**: 
+  * **QA**: 
 
-Requirements
-=================
-Functional Requirements
-- <list down requirement that needs to be there to create the feature. Ex: feature need to show certain component under certain condition>
+---
 
-Non Functional Requirements
-- <some system requirements, ex: expected max CPU increase, FPS, etc>
+## Project Overview
 
-High-Level Diagram 
-- <High level Flow chart>
+Menampilkan prakiraan cuaca per jam (12 jam ke depan) dalam format horizontal scroll dengan informasi:
 
-Low-Level Diagram
-- <Flow chart containing the service name etc, or swimlane stuffs>
+* Jam (contoh: `12:00`)
+* Ikon cuaca (dari `weatherCode`)
+* Suhu (contoh: `22°`)
 
-Code Structure & Implementation Details
-========================================
-<Some pseudo-code on code-change plan and the logic>
+Digunakan untuk memperlihatkan prediksi cuaca kepada user secara ringkas dan mudah digeser.
 
-Operational Excellence
-=======================
-<alert and monitoring link, like datadog dashboard for example>
+---
 
-Backward Compatibility / Rollback Plan
-======================================
-<outline plan for backward compatibility / rollback plan if needed>
+## Requirements
 
-Rollout Plan
-============
-<how we will roll out, ex: phased rollout according to app version? Or feature control / feature flag change?>
+### Functional Requirements
 
-Out of scope
-============
-<list down things that is out of scope>
+* Menampilkan maksimal 12 jam ke depan dari array `weather.hourly.time`.
+* Setiap item menunjukkan:
 
-Demo
-====
-<screenshot, screen record>
- 
+  * Jam dalam format `"HH:mm"`
+  * Ikon cuaca berdasarkan `weatherCode`
+  * Suhu dalam derajat celcius
+* Tersedia dalam bentuk horizontal scroll.
+* Tanpa scrollbar (scroll indicator disembunyikan).
 
-Steps to use this feature
-==========================
-<list down way to use this feature, ex: from which entry point, what to click, where to click, etc> 
+### Non Functional Requirements
 
-Discussions and Alignments
-==========================
-Q: 
-A: 
+* Performa tetap ringan meskipun datanya panjang.
+* Rendering UI harus konsisten dan smooth saat scroll.
 
+---
+
+## High-Level Diagram
+
+```
+WeatherView
+  └── ScrollView (.horizontal)
+        └── HStack (ForEach hourly items)
+              └── VStack (hour | icon | temperature)
+```
+
+---
+
+## Low-Level Diagram
+
+```
+HourlyWeatherView
+├── weather.hourly.time[index] → hourFromTimeString()
+├── weather.hourly.temperature2m[index]
+├── weather.current.weatherCode → viewModel.weatherIconName()
+└── VStack {
+      Text(hour)
+      Image(systemIconName)
+      Text(temperature)
+    }
+```
+
+---
+
+## Code Structure & Implementation Details
+
+```swift
+ScrollView(.horizontal, showsIndicators: false) {
+    HStack(spacing: 16) {
+        ForEach(0..<min(weather.hourly.time.count, 12), id: \.self) { index in
+            VStack {
+                Text(hourFromTimeString(weather.hourly.time[index]))
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+
+                Image(systemName: viewModel.weatherIconName(for: weather.current.weatherCode))
+                    .foregroundColor(.white)
+
+                Text("\(Int(weather.hourly.temperature2m[index]))°")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+            }
+        }
+    }
+    .padding(.horizontal)
+}
+```
+
+---
+
+## Operational Excellence
+
+Belum diperlukan monitoring khusus untuk komponen UI statis ini.
+
+---
+
+## Backward Compatibility / Rollback Plan
+
+Perubahan ini hanya pada level tampilan. Jika bermasalah, UI ini dapat dengan mudah dihilangkan dari view tanpa memengaruhi fitur lain.
+
+---
+
+## Rollout Plan
+
+* Langsung aktif setelah code merge.
+* Tidak menggunakan feature flag.
+
+---
+
+## Out of Scope
+
+* Tidak mencakup *forecast harian*.
+* Tidak mencakup perubahan *theme*, *dark mode*, atau animasi transisi antar jam.
+
+---
+
+## Demo
+
+Contoh tampilan:
+
+```
+12:00 ☀️ 22°
+13:00 ☀️ 23°
+14:00 ☁️ 21°
+...
+```
+
+---
+
+## Steps to use this feature
+
+1. Buka halaman utama cuaca (misal: `WeatherView`).
+2. Scroll horizontal ke kanan untuk melihat prediksi hingga 12 jam ke depan.
+
+---
+
+## Discussions and Alignments
+
+**Q:** Kenapa hanya 12 jam?
+**A:** Supaya tidak terlalu panjang dan tetap mudah dilihat.
+
+**Q:** Ikon cuaca kok tidak sesuai tiap jam?
+**A:** Saat ini masih menggunakan `weather.current.weatherCode`, bisa dikembangkan agar menggunakan `weather.hourly.weatherCode[index]` jika tersedia.
 
